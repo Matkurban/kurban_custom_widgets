@@ -9,8 +9,8 @@ class KurbanRadiusImage extends StatelessWidget {
     super.key,
     required this.image,
     this.radius = 10,
-    required this.width,
-    required this.height,
+    this.width,
+    this.height,
     this.fit = BoxFit.fill,
     this.borderWidth = 0,
     this.borderColor,
@@ -28,11 +28,11 @@ class KurbanRadiusImage extends StatelessWidget {
 
   /// Width of the image container
   /// 图片容器的宽度
-  final double width;
+  final double? width;
 
   /// Height of the image container
   /// 图片容器的高度
-  final double height;
+  final double? height;
 
   /// How the image should be inscribed into the container
   /// 图片在容器中的填充方式
@@ -56,29 +56,25 @@ class KurbanRadiusImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget container = Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        borderRadius: radius != 0 ? BorderRadius.circular(radius) : null,
-        image: DecorationImage(image: image, fit: fit),
-        border:
-            borderWidth > 0
-                ? Border.all(
-                  color: borderColor ?? Theme.of(context).primaryColor,
-                  width: borderWidth,
-                )
-                : null,
-        color: backgroundColor,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          borderRadius: radius != 0 ? BorderRadius.circular(radius) : null,
+          image: DecorationImage(image: image, fit: fit),
+          border:
+              borderWidth > 0
+                  ? Border.all(
+                    color: borderColor ?? Theme.of(context).primaryColor,
+                    width: borderWidth,
+                  )
+                  : null,
+          color: backgroundColor,
+        ),
       ),
     );
-
-    // Wrap with GestureDetector if onTap is provided
-    // 如果提供了onTap回调，则用GestureDetector包装
-    if (onTap != null) {
-      container = GestureDetector(onTap: onTap, child: container);
-    }
-    return container;
   }
 }
