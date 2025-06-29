@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: KurbanRadiusImage(
               width: 300,
               height: 300,
-              radius: 30,
+              borderRadius: BorderRadius.circular(10),
               image: NetworkImage("https://picsum.photos/300"),
             ),
           ),

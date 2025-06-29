@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kurban_custom_widgets/src/logger/model/dio_log_model.dart';
+import 'package:kurban_custom_widgets/src/model/dio_log_model.dart';
 import 'package:kurban_custom_widgets/src/logger/view/widgets/header_pane.dart';
 import 'package:kurban_custom_widgets/src/logger/view/widgets/request_pane.dart';
 import 'package:kurban_custom_widgets/src/logger/view/widgets/response_pane.dart';

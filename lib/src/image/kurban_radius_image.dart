@@ -8,7 +8,7 @@ class KurbanRadiusImage extends StatelessWidget {
   const KurbanRadiusImage({
     super.key,
     required this.image,
-    this.radius = 10,
+    this.borderRadius = BorderRadius.zero,
     this.width,
     this.height,
     this.fit = BoxFit.fill,
@@ -24,7 +24,7 @@ class KurbanRadiusImage extends StatelessWidget {
 
   /// Border radius of the image (only applies when shape is rectangle)
   /// 图片的圆角半径（仅在形状为矩形时生效）
-  final double radius;
+  final BorderRadiusGeometry borderRadius;
 
   /// Width of the image container
   /// 图片容器的宽度
@@ -63,8 +63,7 @@ class KurbanRadiusImage extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          borderRadius: radius != 0 ? BorderRadius.circular(radius) : null,
-          image: DecorationImage(image: image, fit: fit),
+          borderRadius: borderRadius,
           border:
               borderWidth > 0
                   ? Border.all(
@@ -73,6 +72,10 @@ class KurbanRadiusImage extends StatelessWidget {
                   )
                   : null,
           color: backgroundColor,
+        ),
+        child: ClipRRect(
+          borderRadius: borderRadius,
+          child: Image(image: image, width: width, height: height, fit: fit),
         ),
       ),
     );

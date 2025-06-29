@@ -1,6 +1,6 @@
 name: kurban_custom_widgets
 description: "A Flutter UI package that provides internationalized widgets and components for building multilingual applications."
-version: 0.1.5
+version: 0.1.6
 repository: https://github.com/Matkurban/kurban_custom_widgets
 homepage: https://jsontodart.cn
 topics: [widgets]

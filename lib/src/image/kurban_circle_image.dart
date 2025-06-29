@@ -7,7 +7,7 @@ class KurbanCircleImage extends StatelessWidget {
   /// 创建一个圆形图片组件。
   const KurbanCircleImage({
     super.key,
-    this.size,
+    required this.size,
     required this.image,
     this.onError,
     this.colorFilter,
@@ -27,7 +27,7 @@ class KurbanCircleImage extends StatelessWidget {
 
   /// The diameter of the circle.
   /// 圆形的直径。
-  final double? size;
+  final double size;
 
   /// The image to display.
   /// 要显示的图片。
@@ -94,11 +94,9 @@ class KurbanCircleImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final IconThemeData iconTheme = IconTheme.of(context);
-    final double? imageSize = size ?? iconTheme.size;
     return Container(
-      width: imageSize,
-      height: imageSize,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: backgroundColor,

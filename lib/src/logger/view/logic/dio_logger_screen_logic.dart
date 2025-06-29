@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kurban_custom_widgets/src/logger/model/dio_log_model.dart';
+import 'package:kurban_custom_widgets/src/model/dio_log_model.dart';
 import 'package:kurban_custom_widgets/src/logger/view/dio_logger_details_view.dart';
 
 class DioLoggerScreenLogic {

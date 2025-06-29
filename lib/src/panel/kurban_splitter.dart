@@ -44,47 +44,58 @@ class KurbanSplitter extends StatefulWidget {
 }
 
 class _KurbanSplitterState extends State<KurbanSplitter> {
-  late double _firstFraction;
+  late final ValueNotifier<double> _firstFractionNotifier;
   double? _startPosition;
   double? _lastFraction;
 
   @override
   void initState() {
     super.initState();
-    _firstFraction = widget.initialFirstFraction;
+    _firstFractionNotifier = ValueNotifier(widget.initialFirstFraction);
+  }
+
+  @override
+  void didUpdateWidget(KurbanSplitter oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialFirstFraction != oldWidget.initialFirstFraction) {
+      _firstFractionNotifier.value = widget.initialFirstFraction;
+    }
+  }
+
+  @override
+  void dispose() {
+    _firstFractionNotifier.dispose();
+    super.dispose();
   }
 
   void _handleDragStart(double position) {
     if (!widget.enabled) return;
-    setState(() {
-      _startPosition = position;
-      _lastFraction = _firstFraction;
-    });
-    widget.onResizeStart?.call(_firstFraction);
+    _startPosition = position;
+    _lastFraction = _firstFractionNotifier.value;
+    widget.onResizeStart?.call(_firstFractionNotifier.value);
   }
 
   void _handleDragUpdate(double position, double size) {
     if (!widget.enabled || _startPosition == null) return;
     final delta = position - _startPosition!;
-    setState(() {
-      _firstFraction = (_lastFraction! + delta / size).clamp(
-        widget.minFirstFraction,
-        widget.maxFirstFraction,
-      );
-    });
-    widget.onResizeUpdate?.call(_firstFraction);
+
+    _firstFractionNotifier.value = (_lastFraction! + delta / size).clamp(
+      widget.minFirstFraction,
+      widget.maxFirstFraction,
+    );
+    widget.onResizeUpdate?.call(_firstFractionNotifier.value);
   }
 
   void _handleDragEnd() {
     if (!widget.enabled || _startPosition == null) return;
-    widget.onResizeEnd?.call(_firstFraction);
+    widget.onResizeEnd?.call(_firstFractionNotifier.value);
     _startPosition = null;
     _lastFraction = null;
   }
 
   void _handleDoubleTap() {
     if (!widget.enabled) return;
-    setState(() => _firstFraction = widget.initialFirstFraction);
+    _firstFractionNotifier.value = widget.initialFirstFraction;
     widget.onResetSize?.call();
   }
 
@@ -126,40 +137,47 @@ class _KurbanSplitterState extends State<KurbanSplitter> {
                   ? (_) => _handleDragEnd()
                   : null,
           onDoubleTap: _handleDoubleTap,
-          child: Flex(
-            direction: widget.direction,
-            children: [
-              Flexible(
-                flex: (_firstFraction * 1000).round(),
-                child: widget.child1,
-              ),
-              MouseRegion(
-                cursor:
-                    widget.enabled
-                        ? widget.resizeCursor ??
-                            (widget.direction == Axis.horizontal
-                                ? SystemMouseCursors.resizeColumn
-                                : SystemMouseCursors.resizeRow)
-                        : SystemMouseCursors.basic,
-                child: Container(
-                  width:
-                      widget.direction == Axis.horizontal
-                          ? widget.splitterThickness
-                          : null,
-                  height:
-                      widget.direction == Axis.vertical
-                          ? widget.splitterThickness
-                          : null,
-                  decoration:
-                      widget.splitterDecoration ??
-                      BoxDecoration(color: widget.splitterColor ?? Colors.grey),
-                ),
-              ),
-              Flexible(
-                flex: ((1 - _firstFraction) * 1000).round(),
-                child: widget.child2,
-              ),
-            ],
+          child: ValueListenableBuilder<double>(
+            valueListenable: _firstFractionNotifier,
+            builder: (context, firstFraction, child) {
+              return Flex(
+                direction: widget.direction,
+                children: [
+                  Flexible(
+                    flex: (firstFraction * 1000).round(),
+                    child: widget.child1,
+                  ),
+                  MouseRegion(
+                    cursor:
+                        widget.enabled
+                            ? widget.resizeCursor ??
+                                (widget.direction == Axis.horizontal
+                                    ? SystemMouseCursors.resizeColumn
+                                    : SystemMouseCursors.resizeRow)
+                            : SystemMouseCursors.basic,
+                    child: Container(
+                      width:
+                          widget.direction == Axis.horizontal
+                              ? widget.splitterThickness
+                              : null,
+                      height:
+                          widget.direction == Axis.vertical
+                              ? widget.splitterThickness
+                              : null,
+                      decoration:
+                          widget.splitterDecoration ??
+                          BoxDecoration(
+                            color: widget.splitterColor ?? Colors.grey,
+                          ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: ((1 - firstFraction) * 1000).round(),
+                    child: widget.child2,
+                  ),
+                ],
+              );
+            },
           ),
         );
       },

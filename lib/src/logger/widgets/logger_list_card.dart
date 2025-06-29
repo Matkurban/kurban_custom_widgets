@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kurban_custom_widgets/kurban_custom_widgets.dart';
-import 'package:kurban_custom_widgets/src/logger/model/dio_log_model.dart';
+import 'package:kurban_custom_widgets/src/model/dio_log_model.dart';
 
 class LoggerListCard extends StatelessWidget {
   const LoggerListCard({
